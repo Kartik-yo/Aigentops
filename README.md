@@ -60,7 +60,7 @@ Tech Stack
 | Structured DB     | PostgreSQL       | Agent metadata, configs, tokens |
 | Observability     | Prometheus (opt) | Metrics collection (optional)   |
 
-🔍 Features (MVP)
+# 🔍 Features (MVP)
 -  Deploy AI agent from Python via K8s
 -  Manage vector DB (Qdrant) per agent
 -  Attach volumes, secrets, configs dynamically
@@ -69,10 +69,12 @@ Tech Stack
 -  Agent dashboard UI (coming)
 -  Rollback & audit trail (coming)
 
-#Directory Structure
+## Directory Structure
+```
 ai-agent-ops/
 ├── agent-api/              # FastAPI controller for agent mgmt
 ├── k8s_templates/          # Jinja2-based YAML templates
 ├── scripts/                # CLI utilities and helper scripts
 ├── deployments/            # Generated YAMLs (git-ignored)
 ├── README.md
+```
