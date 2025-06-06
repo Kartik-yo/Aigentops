@@ -1,97 +1,78 @@
-# 🧠 AIgentOps — Open Source AI Agent Orchestration on Kubernetes
+# AIgentOps: AI Agent Orchestration Platform with Python + Kubernetes
 
-![License](https://img.shields.io/badge/license-Apache--2.0-blue)
-![Kubernetes](https://img.shields.io/badge/k8s-ready-green)
-![CI/CD](https://img.shields.io/github/actions/workflow/status/<your-org>/aigentops/deploy.yml)
+## 🚀 What We Are Building
 
-## 📌 What is AIgentOps?
+**AIgentOps** is a fully open-source, Kubernetes-native orchestration layer to deploy, manage, and scale autonomous AI agents across clusters using only Python.
 
-**AIgentOps** is a fully open-source, self-hostable platform to **deploy, manage, and monitor AI agents** (LLMs, RAG pipelines, embeddings, vector databases, and frontend UIs) using **Kubernetes and modern DevOps best practices** — all without relying on cloud services or proprietary tools.
+Rather than depending on heavyweight platforms or closed DevOps tools, this system uses:
 
-Whether you’re running AI workloads at the edge, in a secure on-prem cluster, or across hybrid infrastructure, AIgentOps gives you a **modular, GitOps-native, production-ready system** to bring AI to your environment.
+- ⚙️ Python for the control plane (via FastAPI)
+- 📦 Kubernetes for deployment and scaling
+- 🧠 Qdrant for vector storage
+- 🐘 PostgreSQL for structured data
+- ☁️ MinIO for blob storage (S3-compatible)
+- 🔐 GitOps-compatible structure with YAML templates
 
----
-
-## 🎯 Why are we building AIgentOps?
-
-AI is evolving fast, but deploying LLMs, agents, and RAG pipelines in production is still a **manual, fragmented, and cloud-centric** process. We need:
-
-- ✅ **Cloud-neutral infrastructure**: Self-hosted, not locked to AWS/GCP/Azure  
-- ✅ **Composable architecture**: Pick and swap components (LangChain, FastAPI, Weaviate, Qdrant, MinIO, etc.)  
-- ✅ **Secure and auditable deployments**: Secrets managed via SealedSecrets, GitOps tracked rollouts  
-- ✅ **Scalable, monitored stacks**: Built-in metrics, logs, and alerting  
-- ✅ **Infrastructure as Code**: Easily replicate environments across clusters  
-
-> 🛠️ We are DevOps engineers and architects who believe AI deployments should be **as automatable and repeatable** as building a microservice.
+All components are deployed and managed on-prem or in self-hosted environments — **no cloud provider dependency**.
 
 ---
 
-## 🧱 Key Features
+## 🎯 Why We Are Building It
 
-- 🌐 **Kubernetes-Native AI Agent Deployment** (LangChain/FastAPI)
-- 📊 **Built-in Observability**: Prometheus, Grafana, Loki
-- 🔐 **Secure Secrets Management**: Bitnami SealedSecrets
-- 📦 **Fully OSS Stack**: No proprietary SaaS or cloud lock-in
-- 📥 **Vector DB Integration**: Qdrant or Weaviate
-- 🗃️ **Embeddings Storage**: MinIO (S3-compatible)
-- 🚀 **CI/CD Pipelines**: GitHub Actions + Helmfile + Kubernetes
-- 🛑 **Rollback-ready**: Helm versioning, GitOps sync
-- 🛡️ **Auth Gateway**: NestJS with JWT-based auth
-- 🧪 **Modular Architecture**: Deploy API, UI, agent, DB separately or together
+As DevOps shifts into the AI era, we believe the next evolution is **AgentOps** — automating and scaling LLM-powered agents like:
+
+- LangChain / AutoGPT workers
+- RAG-based knowledge retrievers
+- Task-specific bots (support, research, monitoring, etc.)
+
+We aim to solve:
+
+- ✅ Simple & reproducible AI agent deployment
+- ✅ Unified management for compute, memory, vector DBs, models
+- ✅ Full observability and lifecycle control for each agent
+- ✅ On-prem, secure & compliant deployments without vendor lock-in
+
+This project helps infra teams, AI researchers, and edge deployments launch AI workloads reliably — powered by the simplicity of Python and the resilience of Kubernetes.
 
 ---
 
-## 🖼️ System Overview
+## 📦 Architecture Overview
 
 ```
 flowchart TD
-  subgraph DevOps CI/CD
-    GH[GitHub Actions]
-    HR[Helmfile]
-    TF[OpenTofu]
-  end
-
-  subgraph Core Services
-    UI[Next.js UI]
-    API[NestJS Gateway]
-    AGENT[LangChain/FastAPI Agent]
-    VDB[Qdrant]
-    POSTGRES[PostgreSQL]
-    STORAGE[MinIO]
-  end
-
-  subgraph Platform Layer
-    K8S[Kubernetes]
-    HELM[Helm + Helmfile]
-    METRICS[Prometheus + Grafana]
-    LOGS[Loki + Grafana Logs]
-    SECRETS[SealedSecrets]
-  end
-
-  GH --> HR --> HELM --> K8S
-  API --> AGENT --> VDB
-  API --> POSTGRES
-  UI --> API
-  AGENT --> STORAGE
-  K8S --> METRICS
-  K8S --> LOGS
-  K8S --> SECRETS
-
+  USER[User / DevOps Portal] --> FASTAPI
+  FASTAPI --> PY_K8S[Kubernetes Python SDK]
+  FASTAPI --> QDRANT[qdrant-client]
+  FASTAPI --> MINIO[minio SDK]
+  FASTAPI --> POSTGRES[SQLAlchemy]
+  FASTAPI --> FILESYS[Templated YAMLs]
+  FILESYS --> K8sCluster[(Kubernetes Cluster)]
 ```
-Tech stack 
------------
-| Layer        | Tools                           |
-| ------------ | ------------------------------- |
-| Platform     | Kubernetes (k3s or kubeadm)     |
-| CI/CD        | GitHub Actions, Helmfile        |
-| AI Agent     | FastAPI, LangChain              |
-| UI           | Next.js                         |
-| API Gateway  | NestJS with JWT Auth            |
-| Vector DB    | Qdrant / Weaviate               |
-| Storage      | MinIO                           |
-| DB           | PostgreSQL (Bitnami Helm Chart) |
-| Monitoring   | Prometheus, Grafana, Loki       |
-| Secrets Mgmt | SealedSecrets (Bitnami)         |
+Tech Stack
+--------------------
+| Layer             | Tool             | Purpose                         |
+| ----------------- | ---------------- | ------------------------------- |
+| Web/API Layer     | FastAPI          | Control plane + user interface  |
+| Deployment Engine | Kubernetes SDK   | Python interface to deploy YAML |
+| Template Engine   | Jinja2           | Dynamic resource templates      |
+| Vector Store      | Qdrant           | Embedding search & retrieval    |
+| Blob Storage      | MinIO            | Artifact / model file hosting   |
+| Structured DB     | PostgreSQL       | Agent metadata, configs, tokens |
+| Observability     | Prometheus (opt) | Metrics collection (optional)   |
 
+🔍 Features (MVP)
+-  Deploy AI agent from Python via K8s
+-  Manage vector DB (Qdrant) per agent
+-  Attach volumes, secrets, configs dynamically
+-  Persist and expose endpoints via ingress
+-  Auth via JWT (coming)
+-  Agent dashboard UI (coming)
+-  Rollback & audit trail (coming)
 
-
+#Directory Structure
+ai-agent-ops/
+├── agent-api/              # FastAPI controller for agent mgmt
+├── k8s_templates/          # Jinja2-based YAML templates
+├── scripts/                # CLI utilities and helper scripts
+├── deployments/            # Generated YAMLs (git-ignored)
+├── README.md
