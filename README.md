@@ -77,7 +77,7 @@ flowchart TD
   K8S --> LOGS
   K8S --> SECRETS
 
-
+```
 Tech stack 
 -----------
 | Layer        | Tools                           |
@@ -92,6 +92,6 @@ Tech stack
 | DB           | PostgreSQL (Bitnami Helm Chart) |
 | Monitoring   | Prometheus, Grafana, Loki       |
 | Secrets Mgmt | SealedSecrets (Bitnami)         |
-```
+
 
 
