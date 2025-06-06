@@ -1,0 +1,6 @@
+astapi
+uvicorn[standard]
+kubernetes
+jinja2
+requests
+python-dotenv
