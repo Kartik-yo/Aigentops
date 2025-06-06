@@ -43,7 +43,7 @@ AI is evolving fast, but deploying LLMs, agents, and RAG pipelines in production
 
 ## 🖼️ System Overview
 
-```mermaid
+```
 flowchart TD
   subgraph DevOps CI/CD
     GH[GitHub Actions]
